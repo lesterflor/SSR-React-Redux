@@ -7438,21 +7438,37 @@ if (process.env.NODE_ENV === 'production') {
 "use strict";
 
 
-var express = __webpack_require__(55);
-var React = __webpack_require__(17);
-var renderToString = __webpack_require__(120).renderToString;
-var Home = __webpack_require__(131).default;
+var _express = __webpack_require__(55);
 
-var app = express();
+var _express2 = _interopRequireDefault(_express);
+
+var _react = __webpack_require__(17);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _server = __webpack_require__(120);
+
+var _Home = __webpack_require__(131);
+
+var _Home2 = _interopRequireDefault(_Home);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var app = (0, _express2.default)();
+
+// tell express this directory is available to the browser
+app.use(_express2.default.static('public'));
 
 app.get('/', function (req, res) {
-	var content = renderToString(React.createElement(Home, null));
+  var content = (0, _server.renderToString)(_react2.default.createElement(_Home2.default, null));
 
-	res.send(content);
+  var html = '\n        <html>\n            <head></head>\n            <body>\n                <div>' + content + '</div>\n                <script src="bundle.js"></script>\n            </body>\n        </html>\n    ';
+
+  res.send(html);
 });
 
 app.listen(3000, function () {
-	console.log('Listening on port 3000');
+  console.log('Listening on port 3000');
 });
 
 /***/ }),
@@ -23803,7 +23819,18 @@ var Home = function Home() {
 	return _react2.default.createElement(
 		'div',
 		null,
-		'I\'m the home component'
+		_react2.default.createElement(
+			'div',
+			null,
+			'I\'m the home component'
+		),
+		_react2.default.createElement(
+			'button',
+			{ onClick: function onClick() {
+					return console.log('Hello');
+				} },
+			'Press me'
+		)
 	);
 };
 
