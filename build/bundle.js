@@ -143,7 +143,7 @@ module.exports = require("react-dom/server");
 
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
 var _react = __webpack_require__(0);
@@ -165,23 +165,23 @@ var _Routes2 = _interopRequireDefault(_Routes);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (req, store) {
-	var content = (0, _server.renderToString)(_react2.default.createElement(
-		_reactRedux.Provider,
-		{ store: store },
-		_react2.default.createElement(
-			_reactRouterDom.StaticRouter,
-			{
-				location: req.path,
-				context: {} },
-			_react2.default.createElement(
-				'div',
-				null,
-				(0, _reactRouterConfig.renderRoutes)(_Routes2.default)
-			)
-		)
-	));
+  var content = (0, _server.renderToString)(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: store },
+    _react2.default.createElement(
+      _reactRouterDom.StaticRouter,
+      {
+        location: req.path,
+        context: {} },
+      _react2.default.createElement(
+        'div',
+        null,
+        (0, _reactRouterConfig.renderRoutes)(_Routes2.default)
+      )
+    )
+  ));
 
-	return '\n        <html>\n            <head></head>\n            <body>\n                <div id="root">' + content + '</div>\n                <script src="bundle.js"></script>\n            </body>\n        </html>\n    ';
+  return '\n        <html>\n            <head></head>\n            <body>\n                <div id="root">' + content + '</div>\n                <script>\n                    window.INITIAL_STATE = ' + JSON.stringify(store.getState()) + ' \n                </script>\n                <script src="bundle.js"></script>\n            </body>\n        </html>\n    ';
 };
 
 /***/ }),
