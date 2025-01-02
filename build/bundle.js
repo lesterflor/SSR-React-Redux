@@ -82,6 +82,12 @@ var _express = __webpack_require__(2);
 
 var _express2 = _interopRequireDefault(_express);
 
+var _reactRouterConfig = __webpack_require__(18);
+
+var _Routes = __webpack_require__(7);
+
+var _Routes2 = _interopRequireDefault(_Routes);
+
 var _renderer = __webpack_require__(5);
 
 var _renderer2 = _interopRequireDefault(_renderer);
@@ -101,6 +107,11 @@ app.get('*', function (req, res) {
 	var store = (0, _createStore2.default)();
 
 	// some logic to initialize and load data into the store
+	(0, _reactRouterConfig.matchRoutes)(_Routes2.default, req.path).map(function (_ref) {
+		var route = _ref.route;
+
+		return route.loadData ? route.loadData() : null;
+	});
 
 	res.send((0, _renderer2.default)(req, store));
 });
@@ -245,7 +256,8 @@ exports.default = [{
 	exact: true
 }, {
 	path: '/users',
-	component: _UsersList2.default
+	component: _UsersList2.default,
+	loadData: _UsersList.loadData
 }];
 
 /***/ }),
@@ -414,6 +426,7 @@ module.exports = require("axios");
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.loadData = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -481,6 +494,11 @@ function mapStateToProps(state) {
 	return { users: state.users };
 }
 
+function loadData() {
+	console.log('trying to load data');
+}
+
+exports.loadData = loadData;
 exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchUsers: _actions.fetchUsers })(UsersList);
 
 /***/ }),
