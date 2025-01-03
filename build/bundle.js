@@ -104,6 +104,10 @@ var _App = __webpack_require__(21);
 
 var _App2 = _interopRequireDefault(_App);
 
+var _NotFoundPage = __webpack_require__(24);
+
+var _NotFoundPage2 = _interopRequireDefault(_NotFoundPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = [_extends({}, _App2.default, {
@@ -112,7 +116,7 @@ exports.default = [_extends({}, _App2.default, {
 		exact: true
 	}), _extends({}, _UsersListPage2.default, {
 		path: '/users'
-	})]
+	}), _extends({}, _NotFoundPage2.default)]
 })];
 
 /***/ }),
@@ -268,7 +272,14 @@ app.get('*', function (req, res) {
 	});
 
 	Promise.all(promises).then(function () {
-		res.send((0, _renderer2.default)(req, store));
+		var context = {};
+		var content = (0, _renderer2.default)(req, store, context);
+
+		if (context.notFound) {
+			res.status(404);
+		}
+
+		res.send(content);
 	});
 });
 
@@ -314,18 +325,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var HomePage = function HomePage() {
 	return _react2.default.createElement(
 		'div',
-		null,
+		{
+			className: 'center-align',
+			style: { marginTop: '100px' } },
 		_react2.default.createElement(
-			'div',
+			'h3',
 			null,
-			'I\'m the home component'
+			'Welcome '
 		),
 		_react2.default.createElement(
-			'button',
-			{ onClick: function onClick() {
-					return console.log('Hello');
-				} },
-			'Press me'
+			'p',
+			null,
+			'Check out these features'
 		)
 	);
 };
@@ -459,7 +470,7 @@ var _Routes2 = _interopRequireDefault(_Routes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (req, store) {
+exports.default = function (req, store, context) {
   var content = (0, _server.renderToString)(_react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
@@ -467,7 +478,7 @@ exports.default = function (req, store) {
       _reactRouterDom.StaticRouter,
       {
         location: req.path,
-        context: {} },
+        context: context },
       _react2.default.createElement(
         'div',
         null,
@@ -476,7 +487,7 @@ exports.default = function (req, store) {
     )
   ));
 
-  return '\n        <html>\n            <head></head>\n            <body>\n                <div id="root">' + content + '</div>\n                <script>\n                    window.INITIAL_STATE = ' + (0, _serializeJavascript2.default)(store.getState()) + ' \n                </script>\n                <script src="bundle.js"></script>\n            </body>\n        </html>\n    ';
+  return '\n        <html>\n            <head>\n            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">\n            </head>\n            <body>\n                <div id="root">' + content + '</div>\n                <script>\n                    window.INITIAL_STATE = ' + (0, _serializeJavascript2.default)(store.getState()) + ' \n                </script>\n                <script src="bundle.js"></script>\n            </body>\n        </html>\n    ';
 };
 
 /***/ }),
@@ -675,27 +686,45 @@ var Header = function Header(_ref) {
 	);
 
 	return _react2.default.createElement(
-		'div',
+		'nav',
 		null,
 		_react2.default.createElement(
-			_reactRouterDom.Link,
-			{ to: '/' },
-			'React SSR'
-		),
-		_react2.default.createElement(
 			'div',
-			null,
+			{ className: 'nav-wrapper' },
 			_react2.default.createElement(
 				_reactRouterDom.Link,
-				{ to: '/users' },
-				'Users'
+				{
+					className: 'brand-logo',
+					to: '/' },
+				'React SSR'
 			),
 			_react2.default.createElement(
-				_reactRouterDom.Link,
-				{ to: '/admins' },
-				'Admins'
-			),
-			authButton
+				'ul',
+				{ className: 'right' },
+				_react2.default.createElement(
+					'li',
+					null,
+					_react2.default.createElement(
+						_reactRouterDom.Link,
+						{ to: '/users' },
+						'Users'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					null,
+					_react2.default.createElement(
+						_reactRouterDom.Link,
+						{ to: '/admins' },
+						'Admins'
+					)
+				),
+				_react2.default.createElement(
+					'li',
+					null,
+					authButton
+				)
+			)
 		)
 	);
 };
@@ -732,6 +761,39 @@ exports.default = function () {
 };
 
 var _actions = __webpack_require__(4);
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NotFoundPage = function NotFoundPage(_ref) {
+	var _ref$staticContext = _ref.staticContext,
+	    staticContext = _ref$staticContext === undefined ? {} : _ref$staticContext;
+
+	staticContext.notFound = true;
+	return _react2.default.createElement(
+		'h1',
+		null,
+		'Page not found'
+	);
+};
+
+exports.default = {
+	component: NotFoundPage
+};
 
 /***/ })
 /******/ ]);
