@@ -246,7 +246,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var app = (0, _express2.default)();
 
 // send any api request to the defined domain
-app.use('/api', (0, _expressHttpProxy2.default)('https://react-ssr-api.herokuapp.com', {
+app.use('/api', (0, _expressHttpProxy2.default)('http://react-ssr-api.herokuapp.com', {
 	proxyReqOptDecorator: function proxyReqOptDecorator(opts) {
 		opts.headers['x-forwarded-host'] = 'localhost:3000';
 
@@ -664,6 +664,16 @@ var Header = function Header(_ref) {
 
 	console.log('my auth status is', auth);
 
+	var authButton = auth ? _react2.default.createElement(
+		'a',
+		{ href: '/api/logout' },
+		'Logout'
+	) : _react2.default.createElement(
+		'a',
+		{ href: '/api/auth/google' },
+		'Login'
+	);
+
 	return _react2.default.createElement(
 		'div',
 		null,
@@ -671,6 +681,21 @@ var Header = function Header(_ref) {
 			_reactRouterDom.Link,
 			{ to: '/' },
 			'React SSR'
+		),
+		_react2.default.createElement(
+			'div',
+			null,
+			_react2.default.createElement(
+				_reactRouterDom.Link,
+				{ to: '/users' },
+				'Users'
+			),
+			_react2.default.createElement(
+				_reactRouterDom.Link,
+				{ to: '/admins' },
+				'Admins'
+			),
+			authButton
 		)
 	);
 };
