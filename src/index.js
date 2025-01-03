@@ -11,9 +11,9 @@ const app = express();
 // send any api request to the defined domain
 app.use(
 	'/api',
-	proxy('http://react-ssr-api.herokuapp.com', {
+	proxy('https://react-ssr-api.herokuapp.com', {
 		proxyReqOptDecorator(opts) {
-			opts.header['x-forwarded-host'] = 'localhost:3000';
+			opts.headers['x-forwarded-host'] = 'localhost:3000';
 
 			return opts;
 		}
@@ -24,7 +24,7 @@ app.use(
 app.use(express.static('public'));
 
 app.get('*', (req, res) => {
-	const store = createStore();
+	const store = createStore(req);
 
 	// some logic to initialize and load data into the store
 	const promises = matchRoutes(Routes, req.path).map(({ route }) => {
